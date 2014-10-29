@@ -8,7 +8,7 @@ Android下拉刷新上拉加载控件，对所有View通用！
 ###demo首页也是一个可以上拉下拉的ListView
 ![demo首页](https://github.com/jingchenUSTC/PullToRefreshAndLoad/blob/master/screenshots/main.gif)
 ###ListView:
-![ListView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/tree/master/screenshots/ListView.gif)
+![ListView](http://img.blog.csdn.net/20140827133113883?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvemhvbmdrZWppbmd3YW5n/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 ###GridView:
 ![GridView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/tree/master/screenshots/GridView.gif)
 ExpandableListView:
