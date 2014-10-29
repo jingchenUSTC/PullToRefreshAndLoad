@@ -12,12 +12,12 @@ Android下拉刷新上拉加载控件，对所有View通用！
 ###GridView:
 ![GridView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/blob/master/screenshots/GridView.gif)
 ###ExpandableListView:
-![ExpandableListView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/tree/master/screenshots/ExpandableListView.gif)
+![ExpandableListView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/blob/master/screenshots/ExpandableListView.gif)
 ###ScrollView:
-![ScrollView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/tree/master/screenshots/ScrollView.gif)
+![ScrollView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/blob/master/screenshots/ScrollView.gif)
 ###WebView:
-![WebView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/tree/master/screenshots/WebView.gif)
+![WebView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/blob/master/screenshots/WebView.gif)
 ###ImageView:
-![ImageView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/tree/master/screenshots/ImageView.gif)
+![ImageView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/blob/master/screenshots/ImageView.gif)
 ###TextView:
-![TextView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/tree/master/screenshots/TextView.gif)
+![TextView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/blob/master/screenshots/TextView.gif)
