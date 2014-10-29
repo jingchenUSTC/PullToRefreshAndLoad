@@ -10,7 +10,7 @@ Android下拉刷新上拉加载控件，对所有View通用！
 ###ListView:
 ![ListView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/blob/master/screenshots/ListView.gif)
 ###GridView:
-![GridView](GridView.gif)
+![GridView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/blob/master/screenshots/GridView.gif)
 ###ExpandableListView:
 ![ExpandableListView](https://github.com/jingchenUSTC/PullToRefreshAndLoad/tree/master/screenshots/ExpandableListView.gif)
 ###ScrollView:
