@@ -376,22 +376,27 @@ public class PullToRefreshLayout extends RelativeLayout {
 			radio = (float) (2 + 2 * Math.tan(Math.PI / 2 / getMeasuredHeight()
 					* (pullDownY + Math.abs(pullUpY))));
 			requestLayout();
-			if (pullDownY <= refreshDist
-					&& (state == RELEASE_TO_REFRESH || state == DONE)) {
-				// 如果下拉距离没达到刷新的距离且当前状态是释放刷新，改变状态为下拉刷新
-				changeState(INIT);
-			}
-			if (pullDownY >= refreshDist && (state == INIT || state == DONE)) {
-				// 如果下拉距离达到刷新的距离且当前状态是初始状态刷新，改变状态为释放刷新
-				changeState(RELEASE_TO_REFRESH);
-			}
-			// 下面是判断上拉加载的，同上，注意pullUpY是负值
-			if (-pullUpY <= loadmoreDist
-					&& (state == RELEASE_TO_LOAD || state == DONE)) {
-				changeState(INIT);
-			}
-			if (-pullUpY >= loadmoreDist && (state == INIT || state == DONE)) {
-				changeState(RELEASE_TO_LOAD);
+			if(pullDownY > 0){
+				if (pullDownY <= refreshDist
+						&& (state == RELEASE_TO_REFRESH || state == DONE)) {
+					// 如果下拉距离没达到刷新的距离且当前状态是释放刷新，改变状态为下拉刷新
+					changeState(INIT);
+				}
+				if (pullDownY >= refreshDist && state == INIT) {
+					// 如果下拉距离达到刷新的距离且当前状态是初始状态刷新，改变状态为释放刷新
+					changeState(RELEASE_TO_REFRESH);
+				}
+			}else if(pullUpY < 0){
+				// 下面是判断上拉加载的，同上，注意pullUpY是负值
+				if (-pullUpY <= loadmoreDist
+						&& (state == RELEASE_TO_LOAD || state == DONE)) {
+					changeState(INIT);
+				}
+				//上拉操作
+				if (-pullUpY >= loadmoreDist && state == INIT) {
+					changeState(RELEASE_TO_LOAD);
+				}
+				
 			}
 			// 因为刷新和加载操作不能同时进行，所以pullDownY和pullUpY不会同时不为0，因此这里用(pullDownY +
 			// Math.abs(pullUpY))就可以不对当前状态作区分了
