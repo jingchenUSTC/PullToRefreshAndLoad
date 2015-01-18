@@ -231,16 +231,23 @@ public class PullToRefreshLayout extends RelativeLayout
 					.setBackgroundResource(R.drawable.refresh_failed);
 			break;
 		}
-		// 刷新结果停留1秒
-		new Handler()
+		if (pullDownY > 0)
 		{
-			@Override
-			public void handleMessage(Message msg)
+			// 刷新结果停留1秒
+			new Handler()
 			{
-				changeState(DONE);
-				hide();
-			}
-		}.sendEmptyMessageDelayed(0, 1000);
+				@Override
+				public void handleMessage(Message msg)
+				{
+					changeState(DONE);
+					hide();
+				}
+			}.sendEmptyMessageDelayed(0, 1000);
+		} else
+		{
+			changeState(DONE);
+			hide();
+		}
 	}
 
 	/**
@@ -269,16 +276,23 @@ public class PullToRefreshLayout extends RelativeLayout
 			loadStateImageView.setBackgroundResource(R.drawable.load_failed);
 			break;
 		}
-		// 刷新结果停留1秒
-		new Handler()
+		if (pullUpY < 0)
 		{
-			@Override
-			public void handleMessage(Message msg)
+			// 刷新结果停留1秒
+			new Handler()
 			{
-				changeState(DONE);
-				hide();
-			}
-		}.sendEmptyMessageDelayed(0, 1000);
+				@Override
+				public void handleMessage(Message msg)
+				{
+					changeState(DONE);
+					hide();
+				}
+			}.sendEmptyMessageDelayed(0, 1000);
+		} else
+		{
+			changeState(DONE);
+			hide();
+		}
 	}
 
 	private void changeState(int to)
