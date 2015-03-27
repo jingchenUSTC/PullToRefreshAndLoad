@@ -489,6 +489,31 @@ public class PullToRefreshLayout extends RelativeLayout
 		return true;
 	}
 
+	/**
+	 * 自动刷新
+	 */
+	public void autoRefresh()
+	{
+		pullDownY = refreshDist;
+		requestLayout();
+		changeState(REFRESHING);
+		// 刷新操作
+		if (mListener != null)
+			mListener.onRefresh(this);
+	}
+	/**
+	 * 自动加载
+	 */
+	public void autoLoad()
+	{
+		pullUpY = -loadmoreDist;
+		requestLayout();
+		changeState(LOADING);
+		// 加载操作
+		if (mListener != null)
+			mListener.onLoadMore(this);
+	}
+
 	private void initView()
 	{
 		// 初始化下拉布局

@@ -19,17 +19,31 @@ import com.jingchen.pulltorefresh.R;
 
 public class PullableListViewActivity extends Activity
 {
-	ListView listView;
+	private ListView listView;
+	private PullToRefreshLayout ptrl;
+	private boolean isFirstIn = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_listview);
-		((PullToRefreshLayout) findViewById(R.id.refresh_view))
-				.setOnRefreshListener(new MyListener());
+		ptrl = ((PullToRefreshLayout) findViewById(R.id.refresh_view));
+		ptrl.setOnRefreshListener(new MyListener());
 		listView = (ListView) findViewById(R.id.content_view);
 		initListView();
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus)
+	{
+		super.onWindowFocusChanged(hasFocus);
+		// 第一次进入自动刷新
+		if (isFirstIn)
+		{
+			ptrl.autoRefresh();
+			isFirstIn = false;
+		}
 	}
 
 	/**
