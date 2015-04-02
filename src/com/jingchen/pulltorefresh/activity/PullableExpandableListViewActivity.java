@@ -35,7 +35,7 @@ public class PullableExpandableListViewActivity extends Activity
 	}
 
 	/**
-	 * ExpandableListView³õÊ¼»¯·½·¨
+	 * ExpandableListViewåˆå§‹åŒ–æ–¹æ³•
 	 */
 	private void initExpandableListView()
 	{
@@ -80,11 +80,11 @@ public class PullableExpandableListViewActivity extends Activity
 			{
 				if (parent.isGroupExpanded(groupPosition))
 				{
-					// Èç¹ûÕ¹¿ªÔò¹Ø±Õ
+					// å¦‚æœå±•å¼€åˆ™å…³é—­
 					parent.collapseGroup(groupPosition);
 				} else
 				{
-					// Èç¹û¹Ø±ÕÔò´ò¿ª£¬×¢ÒâÕâÀïÊÇÊÖ¶¯´ò¿ª²»ÒªÄ¬ÈÏ¹ö¶¯·ñÔò»áÓĞbug
+					// å¦‚æœå…³é—­åˆ™æ‰“å¼€ï¼Œæ³¨æ„è¿™é‡Œæ˜¯æ‰‹åŠ¨æ‰“å¼€ä¸è¦é»˜è®¤æ»šåŠ¨å¦åˆ™ä¼šæœ‰bug
 					parent.expandGroup(groupPosition);
 				}
 				return true;
@@ -94,8 +94,8 @@ public class PullableExpandableListViewActivity extends Activity
 
 	class ExpandableListAdapter extends BaseExpandableListAdapter
 	{
-		private String[] groupsStrings;// = new String[] { "ÕâÀïÊÇgroup 0",
-										// "ÕâÀïÊÇgroup 1", "ÕâÀïÊÇgroup 2" };
+		private String[] groupsStrings;// = new String[] { "è¿™é‡Œæ˜¯group 0",
+										// "è¿™é‡Œæ˜¯group 1", "è¿™é‡Œæ˜¯group 2" };
 		private String[][] groupItems;
 		private Context context;
 
@@ -105,13 +105,13 @@ public class PullableExpandableListViewActivity extends Activity
 			groupsStrings = new String[8];
 			for (int i = 0; i < groupsStrings.length; i++)
 			{
-				groupsStrings[i] = new String("ÕâÀïÊÇgroup " + i);
+				groupsStrings[i] = new String("è¿™é‡Œæ˜¯group " + i);
 			}
 			groupItems = new String[8][8];
 			for (int i = 0; i < groupItems.length; i++)
 				for (int j = 0; j < groupItems[i].length; j++)
 				{
-					groupItems[i][j] = new String("ÕâÀïÊÇgroup " + i + "ÀïµÄitem "
+					groupItems[i][j] = new String("è¿™é‡Œæ˜¯group " + i + "é‡Œçš„item "
 							+ j);
 				}
 		}

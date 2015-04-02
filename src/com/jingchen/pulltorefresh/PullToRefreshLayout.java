@@ -20,94 +20,94 @@ import android.widget.TextView;
 import com.jingchen.pulltorefresh.pullableview.Pullable;
 
 /**
- * ×Ô¶¨ÒåµÄ²¼¾Ö£¬ÓÃÀ´¹ÜÀíÈı¸ö×Ó¿Ø¼ş£¬ÆäÖĞÒ»¸öÊÇÏÂÀ­Í·£¬Ò»¸öÊÇ°üº¬ÄÚÈİµÄpullableView£¨¿ÉÒÔÊÇÊµÏÖPullable½Ó¿ÚµÄµÄÈÎºÎView£©£¬
- * »¹ÓĞÒ»¸öÉÏÀ­Í·£¬¸ü¶àÏê½â¼û²©¿Íhttp://blog.csdn.net/zhongkejingwang/article/details/38868463
+ * è‡ªå®šä¹‰çš„å¸ƒå±€ï¼Œç”¨æ¥ç®¡ç†ä¸‰ä¸ªå­æ§ä»¶ï¼Œå…¶ä¸­ä¸€ä¸ªæ˜¯ä¸‹æ‹‰å¤´ï¼Œä¸€ä¸ªæ˜¯åŒ…å«å†…å®¹çš„pullableViewï¼ˆå¯ä»¥æ˜¯å®ç°Pullableæ¥å£çš„çš„ä»»ä½•Viewï¼‰ï¼Œ
+ * è¿˜æœ‰ä¸€ä¸ªä¸Šæ‹‰å¤´ï¼Œæ›´å¤šè¯¦è§£è§åšå®¢http://blog.csdn.net/zhongkejingwang/article/details/38868463
  * 
- * @author ³Â¾¸
+ * @author é™ˆé–
  */
 public class PullToRefreshLayout extends RelativeLayout
 {
 	public static final String TAG = "PullToRefreshLayout";
-	// ³õÊ¼×´Ì¬
+	// åˆå§‹çŠ¶æ€
 	public static final int INIT = 0;
-	// ÊÍ·ÅË¢ĞÂ
+	// é‡Šæ”¾åˆ·æ–°
 	public static final int RELEASE_TO_REFRESH = 1;
-	// ÕıÔÚË¢ĞÂ
+	// æ­£åœ¨åˆ·æ–°
 	public static final int REFRESHING = 2;
-	// ÊÍ·Å¼ÓÔØ
+	// é‡Šæ”¾åŠ è½½
 	public static final int RELEASE_TO_LOAD = 3;
-	// ÕıÔÚ¼ÓÔØ
+	// æ­£åœ¨åŠ è½½
 	public static final int LOADING = 4;
-	// ²Ù×÷Íê±Ï
+	// æ“ä½œå®Œæ¯•
 	public static final int DONE = 5;
-	// µ±Ç°×´Ì¬
+	// å½“å‰çŠ¶æ€
 	private int state = INIT;
-	// Ë¢ĞÂ»Øµ÷½Ó¿Ú
+	// åˆ·æ–°å›è°ƒæ¥å£
 	private OnRefreshListener mListener;
-	// Ë¢ĞÂ³É¹¦
+	// åˆ·æ–°æˆåŠŸ
 	public static final int SUCCEED = 0;
-	// Ë¢ĞÂÊ§°Ü
+	// åˆ·æ–°å¤±è´¥
 	public static final int FAIL = 1;
-	// °´ÏÂY×ø±ê£¬ÉÏÒ»¸öÊÂ¼şµãY×ø±ê
+	// æŒ‰ä¸‹Yåæ ‡ï¼Œä¸Šä¸€ä¸ªäº‹ä»¶ç‚¹Yåæ ‡
 	private float downY, lastY;
 
-	// ÏÂÀ­µÄ¾àÀë¡£×¢Òâ£ºpullDownYºÍpullUpY²»¿ÉÄÜÍ¬Ê±²»Îª0
+	// ä¸‹æ‹‰çš„è·ç¦»ã€‚æ³¨æ„ï¼špullDownYå’ŒpullUpYä¸å¯èƒ½åŒæ—¶ä¸ä¸º0
 	public float pullDownY = 0;
-	// ÉÏÀ­µÄ¾àÀë
+	// ä¸Šæ‹‰çš„è·ç¦»
 	private float pullUpY = 0;
 
-	// ÊÍ·ÅË¢ĞÂµÄ¾àÀë
+	// é‡Šæ”¾åˆ·æ–°çš„è·ç¦»
 	private float refreshDist = 200;
-	// ÊÍ·Å¼ÓÔØµÄ¾àÀë
+	// é‡Šæ”¾åŠ è½½çš„è·ç¦»
 	private float loadmoreDist = 200;
 
 	private MyTimer timer;
-	// »Ø¹öËÙ¶È
+	// å›æ»šé€Ÿåº¦
 	public float MOVE_SPEED = 8;
-	// µÚÒ»´ÎÖ´ĞĞ²¼¾Ö
+	// ç¬¬ä¸€æ¬¡æ‰§è¡Œå¸ƒå±€
 	private boolean isLayout = false;
-	// ÔÚË¢ĞÂ¹ı³ÌÖĞ»¬¶¯²Ù×÷
+	// åœ¨åˆ·æ–°è¿‡ç¨‹ä¸­æ»‘åŠ¨æ“ä½œ
 	private boolean isTouch = false;
-	// ÊÖÖ¸»¬¶¯¾àÀëÓëÏÂÀ­Í·µÄ»¬¶¯¾àÀë±È£¬ÖĞ¼ä»áËæÕıÇĞº¯Êı±ä»¯
+	// æ‰‹æŒ‡æ»‘åŠ¨è·ç¦»ä¸ä¸‹æ‹‰å¤´çš„æ»‘åŠ¨è·ç¦»æ¯”ï¼Œä¸­é—´ä¼šéšæ­£åˆ‡å‡½æ•°å˜åŒ–
 	private float radio = 2;
 
-	// ÏÂÀ­¼ıÍ·µÄ×ª180¡ã¶¯»­
+	// ä¸‹æ‹‰ç®­å¤´çš„è½¬180Â°åŠ¨ç”»
 	private RotateAnimation rotateAnimation;
-	// ¾ùÔÈĞı×ª¶¯»­
+	// å‡åŒ€æ—‹è½¬åŠ¨ç”»
 	private RotateAnimation refreshingAnimation;
 
-	// ÏÂÀ­Í·
+	// ä¸‹æ‹‰å¤´
 	private View refreshView;
-	// ÏÂÀ­µÄ¼ıÍ·
+	// ä¸‹æ‹‰çš„ç®­å¤´
 	private View pullView;
-	// ÕıÔÚË¢ĞÂµÄÍ¼±ê
+	// æ­£åœ¨åˆ·æ–°çš„å›¾æ ‡
 	private View refreshingView;
-	// Ë¢ĞÂ½á¹ûÍ¼±ê
+	// åˆ·æ–°ç»“æœå›¾æ ‡
 	private View refreshStateImageView;
-	// Ë¢ĞÂ½á¹û£º³É¹¦»òÊ§°Ü
+	// åˆ·æ–°ç»“æœï¼šæˆåŠŸæˆ–å¤±è´¥
 	private TextView refreshStateTextView;
 
-	// ÉÏÀ­Í·
+	// ä¸Šæ‹‰å¤´
 	private View loadmoreView;
-	// ÉÏÀ­µÄ¼ıÍ·
+	// ä¸Šæ‹‰çš„ç®­å¤´
 	private View pullUpView;
-	// ÕıÔÚ¼ÓÔØµÄÍ¼±ê
+	// æ­£åœ¨åŠ è½½çš„å›¾æ ‡
 	private View loadingView;
-	// ¼ÓÔØ½á¹ûÍ¼±ê
+	// åŠ è½½ç»“æœå›¾æ ‡
 	private View loadStateImageView;
-	// ¼ÓÔØ½á¹û£º³É¹¦»òÊ§°Ü
+	// åŠ è½½ç»“æœï¼šæˆåŠŸæˆ–å¤±è´¥
 	private TextView loadStateTextView;
 
-	// ÊµÏÖÁËPullable½Ó¿ÚµÄView
+	// å®ç°äº†Pullableæ¥å£çš„View
 	private View pullableView;
-	// ¹ıÂË¶àµã´¥Åö
+	// è¿‡æ»¤å¤šç‚¹è§¦ç¢°
 	private int mEvents;
-	// ÕâÁ½¸ö±äÁ¿ÓÃÀ´¿ØÖÆpullµÄ·½Ïò£¬Èç¹û²»¼Ó¿ØÖÆ£¬µ±Çé¿öÂú×ã¿ÉÉÏÀ­ÓÖ¿ÉÏÂÀ­Ê±Ã»·¨ÏÂÀ­
+	// è¿™ä¸¤ä¸ªå˜é‡ç”¨æ¥æ§åˆ¶pullçš„æ–¹å‘ï¼Œå¦‚æœä¸åŠ æ§åˆ¶ï¼Œå½“æƒ…å†µæ»¡è¶³å¯ä¸Šæ‹‰åˆå¯ä¸‹æ‹‰æ—¶æ²¡æ³•ä¸‹æ‹‰
 	private boolean canPullDown = true;
 	private boolean canPullUp = true;
 
 	/**
-	 * Ö´ĞĞ×Ô¶¯»Ø¹öµÄhandler
+	 * æ‰§è¡Œè‡ªåŠ¨å›æ»šçš„handler
 	 */
 	Handler updateHandler = new Handler()
 	{
@@ -115,12 +115,12 @@ public class PullToRefreshLayout extends RelativeLayout
 		@Override
 		public void handleMessage(Message msg)
 		{
-			// »Øµ¯ËÙ¶ÈËæÏÂÀ­¾àÀëmoveDeltaYÔö´ó¶øÔö´ó
+			// å›å¼¹é€Ÿåº¦éšä¸‹æ‹‰è·ç¦»moveDeltaYå¢å¤§è€Œå¢å¤§
 			MOVE_SPEED = (float) (8 + 5 * Math.tan(Math.PI / 2
 					/ getMeasuredHeight() * (pullDownY + Math.abs(pullUpY))));
 			if (!isTouch)
 			{
-				// ÕıÔÚË¢ĞÂ£¬ÇÒÃ»ÓĞÍùÉÏÍÆµÄ»°ÔòĞüÍ££¬ÏÔÊ¾"ÕıÔÚË¢ĞÂ..."
+				// æ­£åœ¨åˆ·æ–°ï¼Œä¸”æ²¡æœ‰å¾€ä¸Šæ¨çš„è¯åˆ™æ‚¬åœï¼Œæ˜¾ç¤º"æ­£åœ¨åˆ·æ–°..."
 				if (state == REFRESHING && pullDownY <= refreshDist)
 				{
 					pullDownY = refreshDist;
@@ -138,10 +138,10 @@ public class PullToRefreshLayout extends RelativeLayout
 				pullUpY += MOVE_SPEED;
 			if (pullDownY < 0)
 			{
-				// ÒÑÍê³É»Øµ¯
+				// å·²å®Œæˆå›å¼¹
 				pullDownY = 0;
 				pullView.clearAnimation();
-				// Òş²ØÏÂÀ­Í·Ê±ÓĞ¿ÉÄÜ»¹ÔÚË¢ĞÂ£¬Ö»ÓĞµ±Ç°×´Ì¬²»ÊÇÕıÔÚË¢ĞÂÊ±²Å¸Ä±ä×´Ì¬
+				// éšè—ä¸‹æ‹‰å¤´æ—¶æœ‰å¯èƒ½è¿˜åœ¨åˆ·æ–°ï¼Œåªæœ‰å½“å‰çŠ¶æ€ä¸æ˜¯æ­£åœ¨åˆ·æ–°æ—¶æ‰æ”¹å˜çŠ¶æ€
 				if (state != REFRESHING && state != LOADING)
 					changeState(INIT);
 				timer.cancel();
@@ -149,16 +149,16 @@ public class PullToRefreshLayout extends RelativeLayout
 			}
 			if (pullUpY > 0)
 			{
-				// ÒÑÍê³É»Øµ¯
+				// å·²å®Œæˆå›å¼¹
 				pullUpY = 0;
 				pullUpView.clearAnimation();
-				// Òş²ØÏÂÀ­Í·Ê±ÓĞ¿ÉÄÜ»¹ÔÚË¢ĞÂ£¬Ö»ÓĞµ±Ç°×´Ì¬²»ÊÇÕıÔÚË¢ĞÂÊ±²Å¸Ä±ä×´Ì¬
+				// éšè—ä¸‹æ‹‰å¤´æ—¶æœ‰å¯èƒ½è¿˜åœ¨åˆ·æ–°ï¼Œåªæœ‰å½“å‰çŠ¶æ€ä¸æ˜¯æ­£åœ¨åˆ·æ–°æ—¶æ‰æ”¹å˜çŠ¶æ€
 				if (state != REFRESHING && state != LOADING)
 					changeState(INIT);
 				timer.cancel();
 				requestLayout();
 			}
-			// Ë¢ĞÂ²¼¾Ö,»á×Ô¶¯µ÷ÓÃonLayout
+			// åˆ·æ–°å¸ƒå±€,ä¼šè‡ªåŠ¨è°ƒç”¨onLayout
 			if (pullDownY != 0 || pullUpY != 0)
 				requestLayout();
 		}
@@ -195,7 +195,7 @@ public class PullToRefreshLayout extends RelativeLayout
 				context, R.anim.reverse_anim);
 		refreshingAnimation = (RotateAnimation) AnimationUtils.loadAnimation(
 				context, R.anim.rotating);
-		// Ìí¼ÓÔÈËÙ×ª¶¯¶¯»­
+		// æ·»åŠ åŒ€é€Ÿè½¬åŠ¨åŠ¨ç”»
 		LinearInterpolator lir = new LinearInterpolator();
 		rotateAnimation.setInterpolator(lir);
 		refreshingAnimation.setInterpolator(lir);
@@ -207,11 +207,11 @@ public class PullToRefreshLayout extends RelativeLayout
 	}
 
 	/**
-	 * Íê³ÉË¢ĞÂ²Ù×÷£¬ÏÔÊ¾Ë¢ĞÂ½á¹û¡£×¢Òâ£ºË¢ĞÂÍê³ÉºóÒ»¶¨Òªµ÷ÓÃÕâ¸ö·½·¨
+	 * å®Œæˆåˆ·æ–°æ“ä½œï¼Œæ˜¾ç¤ºåˆ·æ–°ç»“æœã€‚æ³¨æ„ï¼šåˆ·æ–°å®Œæˆåä¸€å®šè¦è°ƒç”¨è¿™ä¸ªæ–¹æ³•
 	 */
 	/**
 	 * @param refreshResult
-	 *            PullToRefreshLayout.SUCCEED´ú±í³É¹¦£¬PullToRefreshLayout.FAIL´ú±íÊ§°Ü
+	 *            PullToRefreshLayout.SUCCEEDä»£è¡¨æˆåŠŸï¼ŒPullToRefreshLayout.FAILä»£è¡¨å¤±è´¥
 	 */
 	public void refreshFinish(int refreshResult)
 	{
@@ -220,7 +220,7 @@ public class PullToRefreshLayout extends RelativeLayout
 		switch (refreshResult)
 		{
 		case SUCCEED:
-			// Ë¢ĞÂ³É¹¦
+			// åˆ·æ–°æˆåŠŸ
 			refreshStateImageView.setVisibility(View.VISIBLE);
 			refreshStateTextView.setText(R.string.refresh_succeed);
 			refreshStateImageView
@@ -228,7 +228,7 @@ public class PullToRefreshLayout extends RelativeLayout
 			break;
 		case FAIL:
 		default:
-			// Ë¢ĞÂÊ§°Ü
+			// åˆ·æ–°å¤±è´¥
 			refreshStateImageView.setVisibility(View.VISIBLE);
 			refreshStateTextView.setText(R.string.refresh_fail);
 			refreshStateImageView
@@ -237,7 +237,7 @@ public class PullToRefreshLayout extends RelativeLayout
 		}
 		if (pullDownY > 0)
 		{
-			// Ë¢ĞÂ½á¹ûÍ£Áô1Ãë
+			// åˆ·æ–°ç»“æœåœç•™1ç§’
 			new Handler()
 			{
 				@Override
@@ -255,10 +255,10 @@ public class PullToRefreshLayout extends RelativeLayout
 	}
 
 	/**
-	 * ¼ÓÔØÍê±Ï£¬ÏÔÊ¾¼ÓÔØ½á¹û¡£×¢Òâ£º¼ÓÔØÍê³ÉºóÒ»¶¨Òªµ÷ÓÃÕâ¸ö·½·¨
+	 * åŠ è½½å®Œæ¯•ï¼Œæ˜¾ç¤ºåŠ è½½ç»“æœã€‚æ³¨æ„ï¼šåŠ è½½å®Œæˆåä¸€å®šè¦è°ƒç”¨è¿™ä¸ªæ–¹æ³•
 	 * 
 	 * @param refreshResult
-	 *            PullToRefreshLayout.SUCCEED´ú±í³É¹¦£¬PullToRefreshLayout.FAIL´ú±íÊ§°Ü
+	 *            PullToRefreshLayout.SUCCEEDä»£è¡¨æˆåŠŸï¼ŒPullToRefreshLayout.FAILä»£è¡¨å¤±è´¥
 	 */
 	public void loadmoreFinish(int refreshResult)
 	{
@@ -267,14 +267,14 @@ public class PullToRefreshLayout extends RelativeLayout
 		switch (refreshResult)
 		{
 		case SUCCEED:
-			// ¼ÓÔØ³É¹¦
+			// åŠ è½½æˆåŠŸ
 			loadStateImageView.setVisibility(View.VISIBLE);
 			loadStateTextView.setText(R.string.load_succeed);
 			loadStateImageView.setBackgroundResource(R.drawable.load_succeed);
 			break;
 		case FAIL:
 		default:
-			// ¼ÓÔØÊ§°Ü
+			// åŠ è½½å¤±è´¥
 			loadStateImageView.setVisibility(View.VISIBLE);
 			loadStateTextView.setText(R.string.load_fail);
 			loadStateImageView.setBackgroundResource(R.drawable.load_failed);
@@ -282,7 +282,7 @@ public class PullToRefreshLayout extends RelativeLayout
 		}
 		if (pullUpY < 0)
 		{
-			// Ë¢ĞÂ½á¹ûÍ£Áô1Ãë
+			// åˆ·æ–°ç»“æœåœç•™1ç§’
 			new Handler()
 			{
 				@Override
@@ -305,24 +305,24 @@ public class PullToRefreshLayout extends RelativeLayout
 		switch (state)
 		{
 		case INIT:
-			// ÏÂÀ­²¼¾Ö³õÊ¼×´Ì¬
+			// ä¸‹æ‹‰å¸ƒå±€åˆå§‹çŠ¶æ€
 			refreshStateImageView.setVisibility(View.GONE);
 			refreshStateTextView.setText(R.string.pull_to_refresh);
 			pullView.clearAnimation();
 			pullView.setVisibility(View.VISIBLE);
-			// ÉÏÀ­²¼¾Ö³õÊ¼×´Ì¬
+			// ä¸Šæ‹‰å¸ƒå±€åˆå§‹çŠ¶æ€
 			loadStateImageView.setVisibility(View.GONE);
 			loadStateTextView.setText(R.string.pullup_to_load);
 			pullUpView.clearAnimation();
 			pullUpView.setVisibility(View.VISIBLE);
 			break;
 		case RELEASE_TO_REFRESH:
-			// ÊÍ·ÅË¢ĞÂ×´Ì¬
+			// é‡Šæ”¾åˆ·æ–°çŠ¶æ€
 			refreshStateTextView.setText(R.string.release_to_refresh);
 			pullView.startAnimation(rotateAnimation);
 			break;
 		case REFRESHING:
-			// ÕıÔÚË¢ĞÂ×´Ì¬
+			// æ­£åœ¨åˆ·æ–°çŠ¶æ€
 			pullView.clearAnimation();
 			refreshingView.setVisibility(View.VISIBLE);
 			pullView.setVisibility(View.INVISIBLE);
@@ -330,12 +330,12 @@ public class PullToRefreshLayout extends RelativeLayout
 			refreshStateTextView.setText(R.string.refreshing);
 			break;
 		case RELEASE_TO_LOAD:
-			// ÊÍ·Å¼ÓÔØ×´Ì¬
+			// é‡Šæ”¾åŠ è½½çŠ¶æ€
 			loadStateTextView.setText(R.string.release_to_load);
 			pullUpView.startAnimation(rotateAnimation);
 			break;
 		case LOADING:
-			// ÕıÔÚ¼ÓÔØ×´Ì¬
+			// æ­£åœ¨åŠ è½½çŠ¶æ€
 			pullUpView.clearAnimation();
 			loadingView.setVisibility(View.VISIBLE);
 			pullUpView.setVisibility(View.INVISIBLE);
@@ -343,13 +343,13 @@ public class PullToRefreshLayout extends RelativeLayout
 			loadStateTextView.setText(R.string.loading);
 			break;
 		case DONE:
-			// Ë¢ĞÂ»ò¼ÓÔØÍê±Ï£¬É¶¶¼²»×ö
+			// åˆ·æ–°æˆ–åŠ è½½å®Œæ¯•ï¼Œå•¥éƒ½ä¸åš
 			break;
 		}
 	}
 
 	/**
-	 * ²»ÏŞÖÆÉÏÀ­»òÏÂÀ­
+	 * ä¸é™åˆ¶ä¸Šæ‹‰æˆ–ä¸‹æ‹‰
 	 */
 	private void releasePull()
 	{
@@ -358,7 +358,7 @@ public class PullToRefreshLayout extends RelativeLayout
 	}
 
 	/*
-	 * £¨·Ç Javadoc£©ÓÉ¸¸¿Ø¼ş¾ö¶¨ÊÇ·ñ·Ö·¢ÊÂ¼ş£¬·ÀÖ¹ÊÂ¼ş³åÍ»
+	 * ï¼ˆé Javadocï¼‰ç”±çˆ¶æ§ä»¶å†³å®šæ˜¯å¦åˆ†å‘äº‹ä»¶ï¼Œé˜²æ­¢äº‹ä»¶å†²çª
 	 * 
 	 * @see android.view.ViewGroup#dispatchTouchEvent(android.view.MotionEvent)
 	 */
@@ -376,7 +376,7 @@ public class PullToRefreshLayout extends RelativeLayout
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
 		case MotionEvent.ACTION_POINTER_UP:
-			// ¹ıÂË¶àµã´¥Åö
+			// è¿‡æ»¤å¤šç‚¹è§¦ç¢°
 			mEvents = -1;
 			break;
 		case MotionEvent.ACTION_MOVE:
@@ -386,8 +386,8 @@ public class PullToRefreshLayout extends RelativeLayout
 						|| (((Pullable) pullableView).canPullDown()
 								&& canPullDown && state != LOADING))
 				{
-					// ¿ÉÒÔÏÂÀ­£¬ÕıÔÚ¼ÓÔØÊ±²»ÄÜÏÂÀ­
-					// ¶ÔÊµ¼Ê»¬¶¯¾àÀë×öËõĞ¡£¬Ôì³ÉÓÃÁ¦À­µÄ¸Ğ¾õ
+					// å¯ä»¥ä¸‹æ‹‰ï¼Œæ­£åœ¨åŠ è½½æ—¶ä¸èƒ½ä¸‹æ‹‰
+					// å¯¹å®é™…æ»‘åŠ¨è·ç¦»åšç¼©å°ï¼Œé€ æˆç”¨åŠ›æ‹‰çš„æ„Ÿè§‰
 					pullDownY = pullDownY + (ev.getY() - lastY) / radio;
 					if (pullDownY < 0)
 					{
@@ -399,13 +399,13 @@ public class PullToRefreshLayout extends RelativeLayout
 						pullDownY = getMeasuredHeight();
 					if (state == REFRESHING)
 					{
-						// ÕıÔÚË¢ĞÂµÄÊ±ºò´¥ÃşÒÆ¶¯
+						// æ­£åœ¨åˆ·æ–°çš„æ—¶å€™è§¦æ‘¸ç§»åŠ¨
 						isTouch = true;
 					}
 				} else if (pullUpY < 0
 						|| (((Pullable) pullableView).canPullUp() && canPullUp && state != REFRESHING))
 				{
-					// ¿ÉÒÔÉÏÀ­£¬ÕıÔÚË¢ĞÂÊ±²»ÄÜÉÏÀ­
+					// å¯ä»¥ä¸Šæ‹‰ï¼Œæ­£åœ¨åˆ·æ–°æ—¶ä¸èƒ½ä¸Šæ‹‰
 					pullUpY = pullUpY + (ev.getY() - lastY) / radio;
 					if (pullUpY > 0)
 					{
@@ -417,7 +417,7 @@ public class PullToRefreshLayout extends RelativeLayout
 						pullUpY = -getMeasuredHeight();
 					if (state == LOADING)
 					{
-						// ÕıÔÚ¼ÓÔØµÄÊ±ºò´¥ÃşÒÆ¶¯
+						// æ­£åœ¨åŠ è½½çš„æ—¶å€™è§¦æ‘¸ç§»åŠ¨
 						isTouch = true;
 					}
 				} else
@@ -425,7 +425,7 @@ public class PullToRefreshLayout extends RelativeLayout
 			} else
 				mEvents = 0;
 			lastY = ev.getY();
-			// ¸ù¾İÏÂÀ­¾àÀë¸Ä±ä±ÈÀı
+			// æ ¹æ®ä¸‹æ‹‰è·ç¦»æ”¹å˜æ¯”ä¾‹
 			radio = (float) (2 + 2 * Math.tan(Math.PI / 2 / getMeasuredHeight()
 					* (pullDownY + Math.abs(pullUpY))));
 			if (pullDownY != 0 || pullUpY != 0)
@@ -435,51 +435,51 @@ public class PullToRefreshLayout extends RelativeLayout
 				if (pullDownY <= refreshDist
 						&& (state == RELEASE_TO_REFRESH || state == DONE))
 				{
-					// Èç¹ûÏÂÀ­¾àÀëÃ»´ïµ½Ë¢ĞÂµÄ¾àÀëÇÒµ±Ç°×´Ì¬ÊÇÊÍ·ÅË¢ĞÂ£¬¸Ä±ä×´Ì¬ÎªÏÂÀ­Ë¢ĞÂ
+					// å¦‚æœä¸‹æ‹‰è·ç¦»æ²¡è¾¾åˆ°åˆ·æ–°çš„è·ç¦»ä¸”å½“å‰çŠ¶æ€æ˜¯é‡Šæ”¾åˆ·æ–°ï¼Œæ”¹å˜çŠ¶æ€ä¸ºä¸‹æ‹‰åˆ·æ–°
 					changeState(INIT);
 				}
 				if (pullDownY >= refreshDist && state == INIT)
 				{
-					// Èç¹ûÏÂÀ­¾àÀë´ïµ½Ë¢ĞÂµÄ¾àÀëÇÒµ±Ç°×´Ì¬ÊÇ³õÊ¼×´Ì¬Ë¢ĞÂ£¬¸Ä±ä×´Ì¬ÎªÊÍ·ÅË¢ĞÂ
+					// å¦‚æœä¸‹æ‹‰è·ç¦»è¾¾åˆ°åˆ·æ–°çš„è·ç¦»ä¸”å½“å‰çŠ¶æ€æ˜¯åˆå§‹çŠ¶æ€åˆ·æ–°ï¼Œæ”¹å˜çŠ¶æ€ä¸ºé‡Šæ”¾åˆ·æ–°
 					changeState(RELEASE_TO_REFRESH);
 				}
 			} else if (pullUpY < 0)
 			{
-				// ÏÂÃæÊÇÅĞ¶ÏÉÏÀ­¼ÓÔØµÄ£¬Í¬ÉÏ£¬×¢ÒâpullUpYÊÇ¸ºÖµ
+				// ä¸‹é¢æ˜¯åˆ¤æ–­ä¸Šæ‹‰åŠ è½½çš„ï¼ŒåŒä¸Šï¼Œæ³¨æ„pullUpYæ˜¯è´Ÿå€¼
 				if (-pullUpY <= loadmoreDist
 						&& (state == RELEASE_TO_LOAD || state == DONE))
 				{
 					changeState(INIT);
 				}
-				// ÉÏÀ­²Ù×÷
+				// ä¸Šæ‹‰æ“ä½œ
 				if (-pullUpY >= loadmoreDist && state == INIT)
 				{
 					changeState(RELEASE_TO_LOAD);
 				}
 
 			}
-			// ÒòÎªË¢ĞÂºÍ¼ÓÔØ²Ù×÷²»ÄÜÍ¬Ê±½øĞĞ£¬ËùÒÔpullDownYºÍpullUpY²»»áÍ¬Ê±²»Îª0£¬Òò´ËÕâÀïÓÃ(pullDownY +
-			// Math.abs(pullUpY))¾Í¿ÉÒÔ²»¶Ôµ±Ç°×´Ì¬×÷Çø·ÖÁË
+			// å› ä¸ºåˆ·æ–°å’ŒåŠ è½½æ“ä½œä¸èƒ½åŒæ—¶è¿›è¡Œï¼Œæ‰€ä»¥pullDownYå’ŒpullUpYä¸ä¼šåŒæ—¶ä¸ä¸º0ï¼Œå› æ­¤è¿™é‡Œç”¨(pullDownY +
+			// Math.abs(pullUpY))å°±å¯ä»¥ä¸å¯¹å½“å‰çŠ¶æ€ä½œåŒºåˆ†äº†
 			if ((pullDownY + Math.abs(pullUpY)) > 8)
 			{
-				// ·ÀÖ¹ÏÂÀ­¹ı³ÌÖĞÎó´¥·¢³¤°´ÊÂ¼şºÍµã»÷ÊÂ¼ş
+				// é˜²æ­¢ä¸‹æ‹‰è¿‡ç¨‹ä¸­è¯¯è§¦å‘é•¿æŒ‰äº‹ä»¶å’Œç‚¹å‡»äº‹ä»¶
 				ev.setAction(MotionEvent.ACTION_CANCEL);
 			}
 			break;
 		case MotionEvent.ACTION_UP:
 			if (pullDownY > refreshDist || -pullUpY > loadmoreDist)
-				// ÕıÔÚË¢ĞÂÊ±ÍùÏÂÀ­£¨ÕıÔÚ¼ÓÔØÊ±ÍùÉÏÀ­£©£¬ÊÍ·ÅºóÏÂÀ­Í·£¨ÉÏÀ­Í·£©²»Òş²Ø
+				// æ­£åœ¨åˆ·æ–°æ—¶å¾€ä¸‹æ‹‰ï¼ˆæ­£åœ¨åŠ è½½æ—¶å¾€ä¸Šæ‹‰ï¼‰ï¼Œé‡Šæ”¾åä¸‹æ‹‰å¤´ï¼ˆä¸Šæ‹‰å¤´ï¼‰ä¸éšè—
 				isTouch = false;
 			if (state == RELEASE_TO_REFRESH)
 			{
 				changeState(REFRESHING);
-				// Ë¢ĞÂ²Ù×÷
+				// åˆ·æ–°æ“ä½œ
 				if (mListener != null)
 					mListener.onRefresh(this);
 			} else if (state == RELEASE_TO_LOAD)
 			{
 				changeState(LOADING);
-				// ¼ÓÔØ²Ù×÷
+				// åŠ è½½æ“ä½œ
 				if (mListener != null)
 					mListener.onLoadMore(this);
 			}
@@ -487,46 +487,46 @@ public class PullToRefreshLayout extends RelativeLayout
 		default:
 			break;
 		}
-		// ÊÂ¼ş·Ö·¢½»¸ø¸¸Àà
+		// äº‹ä»¶åˆ†å‘äº¤ç»™çˆ¶ç±»
 		super.dispatchTouchEvent(ev);
 		return true;
 	}
 
 	/**
-	 * ×Ô¶¯Ë¢ĞÂ
+	 * è‡ªåŠ¨åˆ·æ–°
 	 */
 	public void autoRefresh()
 	{
 		pullDownY = refreshDist;
 		requestLayout();
 		changeState(REFRESHING);
-		// Ë¢ĞÂ²Ù×÷
+		// åˆ·æ–°æ“ä½œ
 		if (mListener != null)
 			mListener.onRefresh(this);
 	}
 
 	/**
-	 * ×Ô¶¯¼ÓÔØ
+	 * è‡ªåŠ¨åŠ è½½
 	 */
 	public void autoLoad()
 	{
 		pullUpY = -loadmoreDist;
 		requestLayout();
 		changeState(LOADING);
-		// ¼ÓÔØ²Ù×÷
+		// åŠ è½½æ“ä½œ
 		if (mListener != null)
 			mListener.onLoadMore(this);
 	}
 
 	private void initView()
 	{
-		// ³õÊ¼»¯ÏÂÀ­²¼¾Ö
+		// åˆå§‹åŒ–ä¸‹æ‹‰å¸ƒå±€
 		pullView = refreshView.findViewById(R.id.pull_icon);
 		refreshStateTextView = (TextView) refreshView
 				.findViewById(R.id.state_tv);
 		refreshingView = refreshView.findViewById(R.id.refreshing_icon);
 		refreshStateImageView = refreshView.findViewById(R.id.state_iv);
-		// ³õÊ¼»¯ÉÏÀ­²¼¾Ö
+		// åˆå§‹åŒ–ä¸Šæ‹‰å¸ƒå±€
 		pullUpView = loadmoreView.findViewById(R.id.pullup_icon);
 		loadStateTextView = (TextView) loadmoreView
 				.findViewById(R.id.loadstate_tv);
@@ -540,7 +540,7 @@ public class PullToRefreshLayout extends RelativeLayout
 		Log.d("Test", "Test");
 		if (!isLayout)
 		{
-			// ÕâÀïÊÇµÚÒ»´Î½øÀ´µÄÊ±ºò×öÒ»Ğ©³õÊ¼»¯
+			// è¿™é‡Œæ˜¯ç¬¬ä¸€æ¬¡è¿›æ¥çš„æ—¶å€™åšä¸€äº›åˆå§‹åŒ–
 			refreshView = getChildAt(0);
 			pullableView = getChildAt(1);
 			loadmoreView = getChildAt(2);
@@ -551,7 +551,7 @@ public class PullToRefreshLayout extends RelativeLayout
 			loadmoreDist = ((ViewGroup) loadmoreView).getChildAt(0)
 					.getMeasuredHeight();
 		}
-		// ¸Ä±ä×Ó¿Ø¼şµÄ²¼¾Ö£¬ÕâÀïÖ±½ÓÓÃ(pullDownY + pullUpY)×÷ÎªÆ«ÒÆÁ¿£¬ÕâÑù¾Í¿ÉÒÔ²»¶Ôµ±Ç°×´Ì¬×÷Çø·Ö
+		// æ”¹å˜å­æ§ä»¶çš„å¸ƒå±€ï¼Œè¿™é‡Œç›´æ¥ç”¨(pullDownY + pullUpY)ä½œä¸ºåç§»é‡ï¼Œè¿™æ ·å°±å¯ä»¥ä¸å¯¹å½“å‰çŠ¶æ€ä½œåŒºåˆ†
 		refreshView.layout(0,
 				(int) (pullDownY + pullUpY) - refreshView.getMeasuredHeight(),
 				refreshView.getMeasuredWidth(), (int) (pullDownY + pullUpY));
@@ -616,7 +616,7 @@ public class PullToRefreshLayout extends RelativeLayout
 	}
 
 	/**
-	 * Ë¢ĞÂ¼ÓÔØ»Øµ÷½Ó¿Ú
+	 * åˆ·æ–°åŠ è½½å›è°ƒæ¥å£
 	 * 
 	 * @author chenjing
 	 * 
@@ -624,12 +624,12 @@ public class PullToRefreshLayout extends RelativeLayout
 	public interface OnRefreshListener
 	{
 		/**
-		 * Ë¢ĞÂ²Ù×÷
+		 * åˆ·æ–°æ“ä½œ
 		 */
 		void onRefresh(PullToRefreshLayout pullToRefreshLayout);
 
 		/**
-		 * ¼ÓÔØ²Ù×÷
+		 * åŠ è½½æ“ä½œ
 		 */
 		void onLoadMore(PullToRefreshLayout pullToRefreshLayout);
 	}

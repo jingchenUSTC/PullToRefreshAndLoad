@@ -33,14 +33,14 @@ public class PullableGridViewActivity extends Activity
 	}
 
 	/**
-	 * GridView³õÊ¼»¯·½·¨
+	 * GridViewåˆå§‹åŒ–æ–¹æ³•
 	 */
 	private void initGridView()
 	{
 		List<String> items = new ArrayList<String>();
 		for (int i = 0; i < 30; i++)
 		{
-			items.add("ÕâÀïÊÇitem " + i);
+			items.add("è¿™é‡Œæ˜¯item " + i);
 		}
 		MyAdapter adapter = new MyAdapter(this, items);
 		gridView.setAdapter(adapter);

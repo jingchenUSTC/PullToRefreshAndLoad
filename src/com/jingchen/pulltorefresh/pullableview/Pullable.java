@@ -3,16 +3,16 @@ package com.jingchen.pulltorefresh.pullableview;
 public interface Pullable
 {
 	/**
-	 * 判断是否可以下拉，如果不需要下拉功能可以直接return false
+	 * 鍒ゆ柇鏄惁鍙互涓嬫媺锛屽鏋滀笉闇�瑕佷笅鎷夊姛鑳藉彲浠ョ洿鎺eturn false
 	 * 
-	 * @return true如果可以下拉否则返回false
+	 * @return true濡傛灉鍙互涓嬫媺鍚﹀垯杩斿洖false
 	 */
 	boolean canPullDown();
 
 	/**
-	 * 判断是否可以上拉，如果不需要上拉功能可以直接return false
+	 * 鍒ゆ柇鏄惁鍙互涓婃媺锛屽鏋滀笉闇�瑕佷笂鎷夊姛鑳藉彲浠ョ洿鎺eturn false
 	 * 
-	 * @return true如果可以上拉否则返回false
+	 * @return true濡傛灉鍙互涓婃媺鍚﹀垯杩斿洖false
 	 */
 	boolean canPullUp();
 }

@@ -38,7 +38,7 @@ public class PullableListViewActivity extends Activity
 	public void onWindowFocusChanged(boolean hasFocus)
 	{
 		super.onWindowFocusChanged(hasFocus);
-		// µÚÒ»´Î½øÈë×Ô¶¯Ë¢ĞÂ
+		// ç¬¬ä¸€æ¬¡è¿›å…¥è‡ªåŠ¨åˆ·æ–°
 		if (isFirstIn)
 		{
 			ptrl.autoRefresh();
@@ -47,14 +47,14 @@ public class PullableListViewActivity extends Activity
 	}
 
 	/**
-	 * ListView³õÊ¼»¯·½·¨
+	 * ListViewåˆå§‹åŒ–æ–¹æ³•
 	 */
 	private void initListView()
 	{
 		List<String> items = new ArrayList<String>();
 		for (int i = 0; i < 30; i++)
 		{
-			items.add("ÕâÀïÊÇitem " + i);
+			items.add("è¿™é‡Œæ˜¯item " + i);
 		}
 		MyAdapter adapter = new MyAdapter(this, items);
 		listView.setAdapter(adapter);

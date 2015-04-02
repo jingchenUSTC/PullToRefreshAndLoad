@@ -27,12 +27,12 @@ public class PullableGridView extends GridView implements Pullable
 	{
 		if (getCount() == 0)
 		{
-			// Ã»ÓĞitemµÄÊ±ºòÒ²¿ÉÒÔÏÂÀ­Ë¢ĞÂ
+			// æ²¡æœ‰itemçš„æ—¶å€™ä¹Ÿå¯ä»¥ä¸‹æ‹‰åˆ·æ–°
 			return true;
 		} else if (getFirstVisiblePosition() == 0
 				&& getChildAt(0).getTop() >= 0)
 		{
-			// »¬µ½¶¥²¿ÁË
+			// æ»‘åˆ°é¡¶éƒ¨äº†
 			return true;
 		} else
 			return false;
@@ -43,11 +43,11 @@ public class PullableGridView extends GridView implements Pullable
 	{
 		if (getCount() == 0)
 		{
-			// Ã»ÓĞitemµÄÊ±ºòÒ²¿ÉÒÔÉÏÀ­¼ÓÔØ
+			// æ²¡æœ‰itemçš„æ—¶å€™ä¹Ÿå¯ä»¥ä¸Šæ‹‰åŠ è½½
 			return true;
 		} else if (getLastVisiblePosition() == (getCount() - 1))
 		{
-			// »¬µ½µ×²¿ÁË
+			// æ»‘åˆ°åº•éƒ¨äº†
 			if (getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()) != null
 					&& getChildAt(
 							getLastVisiblePosition()

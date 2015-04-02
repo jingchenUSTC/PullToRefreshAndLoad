@@ -3,6 +3,16 @@ package com.jingchen.pulltorefresh;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ListView;
+import android.widget.Toast;
+
 import com.jingchen.pulltorefresh.activity.PullableExpandableListViewActivity;
 import com.jingchen.pulltorefresh.activity.PullableGridViewActivity;
 import com.jingchen.pulltorefresh.activity.PullableImageViewActivity;
@@ -10,22 +20,11 @@ import com.jingchen.pulltorefresh.activity.PullableListViewActivity;
 import com.jingchen.pulltorefresh.activity.PullableScrollViewActivity;
 import com.jingchen.pulltorefresh.activity.PullableTextViewActivity;
 import com.jingchen.pulltorefresh.activity.PullableWebViewActivity;
-import com.jingchen.pulltorefresh.pullableview.PullableScrollView;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 
 /**
- * ¸ü¶àÏê½â¼û²©¿Íhttp://blog.csdn.net/zhongkejingwang/article/details/38868463
+ * æ›´å¤šè¯¦è§£è§åšå®¢http://blog.csdn.net/zhongkejingwang/article/details/38868463
  * 
- * @author ³Â¾¸
+ * @author é™ˆé–
  * 
  */
 public class MainActivity extends Activity
@@ -44,18 +43,18 @@ public class MainActivity extends Activity
 	}
 
 	/**
-	 * ListView³õÊ¼»¯·½·¨
+	 * ListViewåˆå§‹åŒ–æ–¹æ³•
 	 */
 	private void initListView()
 	{
 		List<String> items = new ArrayList<String>();
-		items.add("¿ÉÏÂÀ­Ë¢ĞÂÉÏÀ­¼ÓÔØµÄListView");
-		items.add("¿ÉÏÂÀ­Ë¢ĞÂÉÏÀ­¼ÓÔØµÄGridView");
-		items.add("¿ÉÏÂÀ­Ë¢ĞÂÉÏÀ­¼ÓÔØµÄExpandableListView");
-		items.add("¿ÉÏÂÀ­Ë¢ĞÂÉÏÀ­¼ÓÔØµÄSrcollView");
-		items.add("¿ÉÏÂÀ­Ë¢ĞÂÉÏÀ­¼ÓÔØµÄWebView");
-		items.add("¿ÉÏÂÀ­Ë¢ĞÂÉÏÀ­¼ÓÔØµÄImageView");
-		items.add("¿ÉÏÂÀ­Ë¢ĞÂÉÏÀ­¼ÓÔØµÄTextView");
+		items.add("å¯ä¸‹æ‹‰åˆ·æ–°ä¸Šæ‹‰åŠ è½½çš„ListView");
+		items.add("å¯ä¸‹æ‹‰åˆ·æ–°ä¸Šæ‹‰åŠ è½½çš„GridView");
+		items.add("å¯ä¸‹æ‹‰åˆ·æ–°ä¸Šæ‹‰åŠ è½½çš„ExpandableListView");
+		items.add("å¯ä¸‹æ‹‰åˆ·æ–°ä¸Šæ‹‰åŠ è½½çš„SrcollView");
+		items.add("å¯ä¸‹æ‹‰åˆ·æ–°ä¸Šæ‹‰åŠ è½½çš„WebView");
+		items.add("å¯ä¸‹æ‹‰åˆ·æ–°ä¸Šæ‹‰åŠ è½½çš„ImageView");
+		items.add("å¯ä¸‹æ‹‰åˆ·æ–°ä¸Šæ‹‰åŠ è½½çš„TextView");
 		MyAdapter adapter = new MyAdapter(this, items);
 		listView.setAdapter(adapter);
 		listView.setOnItemLongClickListener(new OnItemLongClickListener()

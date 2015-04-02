@@ -11,13 +11,13 @@ public class MyListener implements OnRefreshListener
 	@Override
 	public void onRefresh(final PullToRefreshLayout pullToRefreshLayout)
 	{
-		// 下拉刷新操作
+		// 涓嬫媺鍒锋柊鎿嶄綔
 		new Handler()
 		{
 			@Override
 			public void handleMessage(Message msg)
 			{
-				// 千万别忘了告诉控件刷新完毕了哦！
+				// 鍗冧竾鍒繕浜嗗憡璇夋帶浠跺埛鏂板畬姣曚簡鍝︼紒
 				pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
 			}
 		}.sendEmptyMessageDelayed(0, 5000);
@@ -26,13 +26,13 @@ public class MyListener implements OnRefreshListener
 	@Override
 	public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout)
 	{
-		// 加载操作
+		// 鍔犺浇鎿嶄綔
 		new Handler()
 		{
 			@Override
 			public void handleMessage(Message msg)
 			{
-				// 千万别忘了告诉控件加载完毕了哦！
+				// 鍗冧竾鍒繕浜嗗憡璇夋帶浠跺姞杞藉畬姣曚簡鍝︼紒
 				pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
 			}
 		}.sendEmptyMessageDelayed(0, 5000);
