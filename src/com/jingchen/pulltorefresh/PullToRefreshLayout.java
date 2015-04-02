@@ -156,9 +156,11 @@ public class PullToRefreshLayout extends RelativeLayout
 				if (state != REFRESHING && state != LOADING)
 					changeState(INIT);
 				timer.cancel();
+				requestLayout();
 			}
 			// 刷新布局,会自动调用onLayout
-			requestLayout();
+			if (pullDownY != 0 || pullUpY != 0)
+				requestLayout();
 		}
 
 	};
@@ -426,7 +428,8 @@ public class PullToRefreshLayout extends RelativeLayout
 			// 根据下拉距离改变比例
 			radio = (float) (2 + 2 * Math.tan(Math.PI / 2 / getMeasuredHeight()
 					* (pullDownY + Math.abs(pullUpY))));
-			requestLayout();
+			if (pullDownY != 0 || pullUpY != 0)
+				requestLayout();
 			if (pullDownY > 0)
 			{
 				if (pullDownY <= refreshDist
@@ -501,6 +504,7 @@ public class PullToRefreshLayout extends RelativeLayout
 		if (mListener != null)
 			mListener.onRefresh(this);
 	}
+
 	/**
 	 * 自动加载
 	 */
