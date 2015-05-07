@@ -152,15 +152,18 @@ public class PullToRefreshLayout extends RelativeLayout
 				// 已完成回弹
 				pullUpY = 0;
 				pullUpView.clearAnimation();
-				// 隐藏下拉头时有可能还在刷新，只有当前状态不是正在刷新时才改变状态
+				// 隐藏上拉头时有可能还在刷新，只有当前状态不是正在刷新时才改变状态
 				if (state != REFRESHING && state != LOADING)
 					changeState(INIT);
 				timer.cancel();
 				requestLayout();
 			}
+			Log.d("handle", "handle");
 			// 刷新布局,会自动调用onLayout
-			if (pullDownY != 0 || pullUpY != 0)
-				requestLayout();
+			requestLayout();
+			// 没有拖拉或者回弹完成
+			if (pullDownY + Math.abs(pullUpY) == 0)
+				timer.cancel();
 		}
 
 	};
@@ -428,7 +431,7 @@ public class PullToRefreshLayout extends RelativeLayout
 			// 根据下拉距离改变比例
 			radio = (float) (2 + 2 * Math.tan(Math.PI / 2 / getMeasuredHeight()
 					* (pullDownY + Math.abs(pullUpY))));
-			if (pullDownY != 0 || pullUpY != 0)
+			if (pullDownY > 0 || pullUpY < 0)
 				requestLayout();
 			if (pullDownY > 0)
 			{
@@ -468,8 +471,10 @@ public class PullToRefreshLayout extends RelativeLayout
 			break;
 		case MotionEvent.ACTION_UP:
 			if (pullDownY > refreshDist || -pullUpY > loadmoreDist)
-				// 正在刷新时往下拉（正在加载时往上拉），释放后下拉头（上拉头）不隐藏
+			// 正在刷新时往下拉（正在加载时往上拉），释放后下拉头（上拉头）不隐藏
+			{
 				isTouch = false;
+			}
 			if (state == RELEASE_TO_REFRESH)
 			{
 				changeState(REFRESHING);
