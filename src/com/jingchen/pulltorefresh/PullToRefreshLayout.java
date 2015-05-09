@@ -3,7 +3,9 @@ package com.jingchen.pulltorefresh;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -106,6 +108,8 @@ public class PullToRefreshLayout extends RelativeLayout
 	private boolean canPullDown = true;
 	private boolean canPullUp = true;
 
+	private Context mContext;
+
 	/**
 	 * 执行自动回滚的handler
 	 */
@@ -193,6 +197,7 @@ public class PullToRefreshLayout extends RelativeLayout
 
 	private void initView(Context context)
 	{
+		mContext = context;
 		timer = new MyTimer(updateHandler);
 		rotateAnimation = (RotateAnimation) AnimationUtils.loadAnimation(
 				context, R.anim.reverse_anim);
@@ -498,16 +503,58 @@ public class PullToRefreshLayout extends RelativeLayout
 	}
 
 	/**
+	 * @author chenjing 自动模拟手指滑动的task
+	 * 
+	 */
+	private class AutoRefreshAndLoadTask extends
+			AsyncTask<Integer, Float, String>
+	{
+
+		@Override
+		protected String doInBackground(Integer... params)
+		{
+			while (pullDownY < 4 / 3 * refreshDist)
+			{
+				pullDownY += MOVE_SPEED;
+				publishProgress(pullDownY);
+				try
+				{
+					Thread.sleep(params[0]);
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result)
+		{
+			changeState(REFRESHING);
+			// 刷新操作
+			if (mListener != null)
+				mListener.onRefresh(PullToRefreshLayout.this);
+			hide();
+		}
+
+		@Override
+		protected void onProgressUpdate(Float... values)
+		{
+			if (pullDownY > refreshDist)
+				changeState(RELEASE_TO_REFRESH);
+			requestLayout();
+		}
+
+	}
+
+	/**
 	 * 自动刷新
 	 */
 	public void autoRefresh()
 	{
-		pullDownY = refreshDist;
-		requestLayout();
-		changeState(REFRESHING);
-		// 刷新操作
-		if (mListener != null)
-			mListener.onRefresh(this);
+		AutoRefreshAndLoadTask task = new AutoRefreshAndLoadTask();
+		task.execute(20);
 	}
 
 	/**
