@@ -35,4 +35,16 @@ public class PullableImageView extends ImageView implements Pullable
 		return true;
 	}
 
+	private boolean canPullUp = true, canPullDown = true;
+
+	@Override
+	public void setPullUp(boolean flag) {
+		canPullUp = flag;
+	}
+
+	@Override
+	public void setPullDown(boolean flag) {
+		canPullDown = flag;
+	}
+
 }

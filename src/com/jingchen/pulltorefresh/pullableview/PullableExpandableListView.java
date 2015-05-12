@@ -59,4 +59,16 @@ public class PullableExpandableListView extends ExpandableListView implements
 		return false;
 	}
 
+	private boolean canPullUp = true, canPullDown = true;
+
+	@Override
+	public void setPullUp(boolean flag) {
+		canPullUp = flag;
+	}
+
+	@Override
+	public void setPullDown(boolean flag) {
+		canPullDown = flag;
+	}
+
 }

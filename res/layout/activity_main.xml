@@ -79,7 +79,6 @@
             android:divider="@color/gray"
             android:dividerHeight="1dp" />
 
-        <include layout="@layout/load_more" />
     </com.jingchen.pulltorefresh.PullToRefreshLayout>
 
 </RelativeLayout>
