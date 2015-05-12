@@ -3,6 +3,7 @@ package com.jingchen.pulltorefresh;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -16,10 +17,19 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.webkit.WebView;
+import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.jingchen.pulltorefresh.pullableview.Pullable;
+import com.jingchen.pulltorefresh.pullableview.PullableDefault;
+import com.jingchen.pulltorefresh.pullableview.PullableGridView;
+import com.jingchen.pulltorefresh.pullableview.PullableListView;
+import com.jingchen.pulltorefresh.pullableview.PullableScrollView;
+import com.jingchen.pulltorefresh.pullableview.PullableWebView;
 
 /**
  * 自定义的布局，用来管理三个子控件，其中一个是下拉头，一个是包含内容的pullableView（可以是实现Pullable接口的的任何View），
@@ -27,6 +37,7 @@ import com.jingchen.pulltorefresh.pullableview.Pullable;
  * 
  * @author 陈靖
  */
+@SuppressLint("DrawAllocation")
 public class PullToRefreshLayout extends RelativeLayout {
 	public static final String TAG = "PullToRefreshLayout";
 	// 初始状态
@@ -99,8 +110,9 @@ public class PullToRefreshLayout extends RelativeLayout {
 	// 加载结果：成功或失败
 	private TextView loadStateTextView;
 
-	// 实现了Pullable接口的View
-	private View pullableView;
+	// Pullable接口
+	private Pullable pullable;
+	private View mContentViewContainer;
 	// 过滤多点触碰
 	private int mEvents;
 	// 这两个变量用来控制pull的方向，如果不加控制，当情况满足可上拉又可下拉时没法下拉
@@ -202,8 +214,7 @@ public class PullToRefreshLayout extends RelativeLayout {
 
 	/**
 	 * 完成刷新操作，显示刷新结果。注意：刷新完成后一定要调用这个方法
-	 */
-	/**
+	 * 
 	 * @param refreshResult
 	 *            PullToRefreshLayout.SUCCEED代表成功，PullToRefreshLayout.FAIL代表失败
 	 */
@@ -361,8 +372,7 @@ public class PullToRefreshLayout extends RelativeLayout {
 		case MotionEvent.ACTION_MOVE:
 			if (mEvents == 0) {
 				if (pullDownY > 0
-						|| (((Pullable) pullableView).canPullDown()
-								&& canPullDown && state != LOADING)) {
+						|| (pullable.canPullDown() && canPullDown && state != LOADING)) {
 					// 可以下拉，正在加载时不能下拉
 					// 对实际滑动距离做缩小，造成用力拉的感觉
 					pullDownY = pullDownY + (ev.getY() - lastY) / radio;
@@ -378,7 +388,7 @@ public class PullToRefreshLayout extends RelativeLayout {
 						isTouch = true;
 					}
 				} else if (pullUpY < 0
-						|| (((Pullable) pullableView).canPullUp() && canPullUp && state != REFRESHING)) {
+						|| (pullable.canPullUp() && canPullUp && state != REFRESHING)) {
 					// 可以上拉，正在刷新时不能上拉
 					pullUpY = pullUpY + (ev.getY() - lastY) / radio;
 					if (pullUpY > 0) {
@@ -533,16 +543,33 @@ public class PullToRefreshLayout extends RelativeLayout {
 		}
 	}
 
+	@SuppressLint("DrawAllocation")
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		Log.d("Test", "Test");
 		if (!isLayout) {
 			// 这里是第一次进来的时候做一些初始化
 			refreshView = getChildAt(0);
-			pullableView = getChildAt(1);
+			mContentViewContainer = getChildAt(1);
 			loadmoreView = getChildAt(2);
+
+			if (mContentViewContainer instanceof ListView) {
+				Log.i(TAG, "ListView");
+				pullable = new PullableListView(mContentViewContainer);
+			} else if (mContentViewContainer instanceof GridView) {
+				Log.i(TAG, "GridView");
+				pullable = new PullableGridView(mContentViewContainer);
+			} else if (mContentViewContainer instanceof ScrollView) {
+				Log.i(TAG, "ScrollView");
+				pullable = new PullableScrollView(mContentViewContainer);
+			} else if (mContentViewContainer instanceof WebView) {
+				Log.i(TAG, "WebView");
+				pullable = new PullableWebView(mContentViewContainer);
+			} else
+				pullable = new PullableDefault();
+
 			if (loadmoreView == null) {
-				((Pullable) pullableView).setPullUp(false);
+				pullable.setPullUp(false);
 			}
 			isLayout = true;
 			initView();
@@ -556,17 +583,20 @@ public class PullToRefreshLayout extends RelativeLayout {
 		refreshView.layout(0,
 				(int) (pullDownY + pullUpY) - refreshView.getMeasuredHeight(),
 				refreshView.getMeasuredWidth(), (int) (pullDownY + pullUpY));
-		pullableView.layout(0, (int) (pullDownY + pullUpY),
-				pullableView.getMeasuredWidth(), (int) (pullDownY + pullUpY)
-						+ pullableView.getMeasuredHeight());
+		mContentViewContainer.layout(
+				0,
+				(int) (pullDownY + pullUpY),
+				mContentViewContainer.getMeasuredWidth(),
+				(int) (pullDownY + pullUpY)
+						+ mContentViewContainer.getMeasuredHeight());
 		if (loadmoreView != null)
 			loadmoreView.layout(
 					0,
 					(int) (pullDownY + pullUpY)
-							+ pullableView.getMeasuredHeight(),
+							+ mContentViewContainer.getMeasuredHeight(),
 					loadmoreView.getMeasuredWidth(),
 					(int) (pullDownY + pullUpY)
-							+ pullableView.getMeasuredHeight()
+							+ mContentViewContainer.getMeasuredHeight()
 							+ loadmoreView.getMeasuredHeight());
 	}
 

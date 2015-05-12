@@ -71,7 +71,7 @@
         <include layout="@layout/refresh_head" />
         <!-- 支持所有实现Pullable接口的View -->
 
-        <com.jingchen.pulltorefresh.pullableview.PullableListView
+        <ListView
             android:id="@+id/content_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

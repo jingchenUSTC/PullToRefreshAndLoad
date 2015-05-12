@@ -2,54 +2,34 @@ package com.jingchen.pulltorefresh.pullableview;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ScrollView;
 
-public class PullableScrollView extends ScrollView implements Pullable
-{
+public class PullableScrollView extends Pullable {
+	private ScrollView mContent;
 
-	public PullableScrollView(Context context)
-	{
-		super(context);
-	}
-
-	public PullableScrollView(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
-
-	public PullableScrollView(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
+	public PullableScrollView(View view) {
+		mContent = (ScrollView) view;
 	}
 
 	@Override
-	public boolean canPullDown()
-	{
-		if (getScrollY() == 0)
+	public boolean canPullDown() {
+		if (!canPullDown)
+			return false;
+		if (mContent.getScrollY() == 0)
 			return true;
 		else
 			return false;
 	}
 
 	@Override
-	public boolean canPullUp()
-	{
-		if (getScrollY() >= (getChildAt(0).getHeight() - getMeasuredHeight()))
+	public boolean canPullUp() {
+		if (!canPullUp)
+			return false;
+		if (mContent.getScrollY() >= (mContent.getChildAt(0).getHeight() - mContent
+				.getMeasuredHeight()))
 			return true;
 		else
 			return false;
 	}
-
-	private boolean canPullUp = true, canPullDown = true;
-
-	@Override
-	public void setPullUp(boolean flag) {
-		canPullUp = flag;
-	}
-
-	@Override
-	public void setPullDown(boolean flag) {
-		canPullDown = flag;
-	}
-
 }

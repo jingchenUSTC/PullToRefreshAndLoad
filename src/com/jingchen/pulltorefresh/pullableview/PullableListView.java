@@ -1,67 +1,46 @@
 package com.jingchen.pulltorefresh.pullableview;
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 
-public class PullableListView extends ListView implements Pullable {
+public class PullableListView extends Pullable {
+	private ListView mContent;
 
-	public PullableListView(Context context) {
-		super(context);
-	}
-
-	public PullableListView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
-	public PullableListView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
+	public PullableListView(View listView) {
+		mContent = (ListView)listView;
 	}
 
 	@Override
 	public boolean canPullDown() {
 		if (!canPullDown)
 			return false;
-		if (getCount() == 0) {
+		if (mContent.getCount() == 0) {
 			// 没有item的时候也可以下拉刷新
 			return true;
-		} else if (getFirstVisiblePosition() == 0
-				&& getChildAt(0).getTop() >= 0) {
+		} else if (mContent.getFirstVisiblePosition() == 0
+				&& mContent.getChildAt(0).getTop() >= 0) {
 			// 滑到ListView的顶部了
 			return true;
 		} else
 			return false;
 	}
 
-	@Override
 	public boolean canPullUp() {
 		if (!canPullUp)
 			return false;
-		if (getCount() == 0) {
+		if (mContent.getCount() == 0) {
 			// 没有item的时候也可以上拉加载
 			return true;
-		} else if (getLastVisiblePosition() == (getCount() - 1)) {
+		} else if (mContent.getLastVisiblePosition() == (mContent.getCount() - 1)) {
 			// 滑到底部了
-			if (getChildAt(getLastVisiblePosition() - getFirstVisiblePosition()) != null
-					&& getChildAt(
-							getLastVisiblePosition()
-									- getFirstVisiblePosition()).getBottom() <= getMeasuredHeight())
+			if (mContent.getChildAt(mContent.getLastVisiblePosition()
+					- mContent.getFirstVisiblePosition()) != null
+					&& mContent.getChildAt(
+							mContent.getLastVisiblePosition()
+									- mContent.getFirstVisiblePosition())
+							.getBottom() <= mContent.getMeasuredHeight())
 				return true;
 		}
 		return false;
 	}
-
-	private boolean canPullUp = true, canPullDown = true;
-
-	@Override
-	public void setPullUp(boolean flag) {
-		canPullUp = flag;
-	}
-
-	@Override
-	public void setPullDown(boolean flag) {
-		canPullDown = flag;
-	}
-
 }
