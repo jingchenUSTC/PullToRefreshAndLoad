@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">通用版下拉刷新上拉加载控件</string>
+    <string name="head">这里是HeadView</string>
+
+</resources>
